@@ -6,11 +6,10 @@ This repository contains the replication package of this paper:
 ## Organization
 
 * The `scripts/` folder contains all the scripts we used to collect data, run the propensity score matching, and collect metrics through SonarQube and GH Archive.  Rerunning the scripts will likely not get the same dataset we obtained for our paper because of different aspects: GitHub repositories growing and taken down, GitHub API changing, SonarQube changing, etc.
-* The `data/` folder contains the exact dataset we used for our paper.
+* The `data/` folder contains the dataset we used for our paper.
     * `repos.csv`: Metadata for treatment group repositories (Claude-adopting projects)
     * `claude_commits.csv`: Commit-level data showing commits modifying CLAUDE.md files
     * `claude_files.csv`: File-level data for Claude configuration files
-    * `repo_events.csv` / `repo_events_control.csv`: GitHub event data for treatment/control repositories
     * `matching.csv`: Propensity score matching results (treatment-control pairs)
     * `panel_event_monthly.csv`: Main panel dataset used for DiD analysis (monthly aggregated)
     * `panel_event_monthly_modified.csv`: The same as panel_event_monthly.csv but includes confidence and agents
@@ -18,7 +17,6 @@ This repository contains the replication package of this paper:
     * `repo_metrics.csv`: Additional repository-level metrics (stars, contributors, etc.)
     * `sonarqube_warnings.csv`: SonarQube static analysis warnings per repository (as available)
     * `sonarqube_warning_definitions.csv`: Definitions and categories of SonarQube warning types
-    * `control_repo_candidates_*.csv`: Monthly snapshots of candidate control repositories
 * The `notebooks/` folder contains R notebooks that will read from `data/` and reproduce results in the paper.
     * `DataCollection.md`: Dataset description
     * `PropensityScoreMatching.md`: Matching results
