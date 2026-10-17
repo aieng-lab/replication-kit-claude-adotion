@@ -1,0 +1,292 @@
+rule,type,severity,effort,example_message,category
+Web:AvoidCommentedOutCodeCheck,CODE_SMELL,MAJOR,5min,Remove this commented out code.,Code Hygiene
+Web:DoctypePresenceCheck,BUG,MAJOR,5min,Insert a <!DOCTYPE> declaration to before this <html> tag.,HTML Structure
+Web:FieldsetWithoutLegendCheck,BUG,MINOR,5min,Add a <legend> tag to this fieldset.,Other
+Web:FrameWithoutTitleCheck,BUG,MINOR,5min,"Add a ""title"" attribute to this <iframe> tag.",Accessibility
+Web:ImgWithoutAltCheck,BUG,MINOR,5min,"Add an ""alt"" attribute to this image.",Accessibility
+Web:ItemTagNotWithinContainerTagCheck,BUG,MINOR,10min,Surround this <li> item tag by a <ul> or <ol> container one.,HTML Structure
+Web:LinkToImageCheck,CODE_SMELL,MAJOR,15min,Change this link to not directly target an image.,Other
+Web:MetaRefreshCheck,CODE_SMELL,MAJOR,20min,Remove this meta refresh tag.,HTML Structure
+Web:PageWithoutTitleCheck,BUG,MAJOR,5min,Add a <title> tag to this page.,Accessibility
+Web:S1135,CODE_SMELL,INFO,0min,"Complete the task associated to this ""TODO"" comment.",Code Hygiene
+Web:S1827,CODE_SMELL,MAJOR,5min,"Remove this deprecated ""frameborder"" attribute.",API Usage
+Web:S4084,CODE_SMELL,MAJOR,5min,Add subtitles and description files for this video.,Accessibility
+Web:S4645,BUG,MAJOR,2min,A </script> was found without a relating opening <script> tag. This may be caused by nested script tags.,HTML Structure
+Web:S5254,BUG,MAJOR,2min,"Add ""lang"" and/or ""xml:lang"" attributes to this ""<html>"" element",Accessibility
+Web:S5255,CODE_SMELL,MAJOR,5min,"Add an ""aria-label"" or ""aria-labbelledby"" attribute to this element.",Accessibility
+Web:S5256,BUG,MAJOR,2min,"Add ""<th>"" headers to this ""<table>"".",Accessibility
+Web:S5257,CODE_SMELL,MAJOR,30min,Replace this layout table with a CSS layout.,Accessibility
+Web:S5258,BUG,CRITICAL,5min,"Remove this ""th"" element",Other
+Web:S5260,BUG,CRITICAL,5min,"id ""Yes,"" in ""headers"" does not reference any <th> header.",Other
+Web:ServerSideImageMapsCheck,BUG,MINOR,1h,"Use the ""map"" tag and ""area"" tags instead.",Other
+Web:TableHeaderHasIdOrScopeCheck,BUG,MAJOR,10min,Add either an 'id' or a 'scope' attribute to this <th> tag.,Accessibility
+Web:TableWithoutCaptionCheck,BUG,MINOR,5min,Add a description to this table.,Other
+Web:UnsupportedTagsInHtml5Check,BUG,MAJOR,20min,"Remove this deprecated ""center"" element.",API Usage
+docker:S6476,CODE_SMELL,MAJOR,5min,Replace `as` with upper case format `AS`.,Infrastructure
+go:ParsingError,CODE_SMELL,MAJOR,30min,A parsing error occurred in this file.,Other
+kotlin:S100,CODE_SMELL,MINOR,5min,"Rename function ""treat quoted error message as business error for non string responses"" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$",Naming Conventions
+kotlin:S101,CODE_SMELL,MINOR,5min,"Rename class ""trivial cases"" to match the regular expression ^[A-Z][a-zA-Z0-9]*$",Other
+kotlin:S1066,CODE_SMELL,MAJOR,5min,"Merge this ""if"" statement with the nested one.",Code Style
+kotlin:S107,CODE_SMELL,MAJOR,20min,"This function has 12 parameters, which is greater than the 7 authorized.",Code Complexity
+kotlin:S108,CODE_SMELL,MAJOR,5min,Either remove or fill this block of code.,Error Handling
+kotlin:S1125,CODE_SMELL,MINOR,5min,Remove the unnecessary Boolean literal.,Code Style
+kotlin:S1128,CODE_SMELL,MINOR,2min,Remove this unused import.,Code Hygiene
+kotlin:S1134,CODE_SMELL,MAJOR,0min,"Take the required action to fix the issue indicated by this ""FIXME"" comment.",Other
+kotlin:S1135,CODE_SMELL,INFO,0min,Complete the task associated to this TODO comment.,Code Hygiene
+kotlin:S1144,CODE_SMELL,MAJOR,5min,"Remove this unused private ""currentUrl"" method.",Code Hygiene
+kotlin:S117,CODE_SMELL,MINOR,2min,Rename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$,Other
+kotlin:S1172,CODE_SMELL,MAJOR,5min,"Use ""_"" instead of this unused lambda parameter ""index"".",Code Hygiene
+kotlin:S1186,CODE_SMELL,CRITICAL,5min,Add a nested comment explaining why this function is empty or complete the implementation.,Empty/Incomplete Code
+kotlin:S1192,CODE_SMELL,CRITICAL,8min,"Define a constant instead of duplicating this literal ""image/jpeg"" 4 times.",Code Complexity
+kotlin:S125,CODE_SMELL,MAJOR,5min,Remove this commented out code.,Other
+kotlin:S1479,CODE_SMELL,MAJOR,30min,Reduce the number of when branches from 31 to at most 30.,Other
+kotlin:S1764,BUG,MAJOR,2min,Correct one of the identical sub-expressions on both sides this operator.,Other
+kotlin:S1871,CODE_SMELL,MAJOR,10min,This branch's code block is the same as the block for the branch on line 188.,Logic Error
+kotlin:S3776,CODE_SMELL,CRITICAL,4h25min,Refactor this method to reduce its Cognitive Complexity from 275 to the 15 allowed.,Code Complexity
+kotlin:S3923,BUG,MAJOR,15min,Remove this conditional structure or edit its code blocks so that they're not all the same.,Other
+kotlin:S4144,CODE_SMELL,MAJOR,15min,"Update this function so that its implementation is not identical to ""onFileSelected"" on line 55.",Other
+kotlin:S6318,CODE_SMELL,MINOR,1min,"Remove this unnecessary ""suspend"" modifier.",Other
+php:S100,CODE_SMELL,MINOR,5min,"Rename function ""get_inner_blocks"" to match the regular expression ^[a-z][a-zA-Z0-9]*$.",Naming Conventions
+php:S101,CODE_SMELL,MINOR,5min,"Rename class ""Comment_Policy"" to match the regular expression ^[A-Z][a-zA-Z0-9]*$.",Naming Conventions
+php:S103,CODE_SMELL,MAJOR,1min,Split this 132 characters long line (which is greater than 120 authorized).,Other
+php:S105,CODE_SMELL,MINOR,2min,Replace all tab characters in this file by sequences of white-spaces.,Other
+php:S1066,CODE_SMELL,MAJOR,5min,Merge this if statement with the enclosing one.,Code Style
+php:S1068,CODE_SMELL,MAJOR,5min,"Remove this unused ""$db"" private field.",Code Hygiene
+php:S107,CODE_SMELL,MAJOR,20min,"This function has 8 parameters, which is greater than the 7 authorized.",Code Complexity
+php:S108,CODE_SMELL,MAJOR,5min,Either remove or fill this block of code.,Error Handling
+php:S1109,CODE_SMELL,MINOR,1min,Move this closing curly brace to the next line.,Other
+php:S1110,CODE_SMELL,MAJOR,1min,Remove these useless parentheses.,Code Style
+php:S1116,CODE_SMELL,MINOR,2min,Remove this empty statement.,Code Style
+php:S112,CODE_SMELL,MAJOR,20min,Define and throw a dedicated exception instead of using a generic one.,Error Handling
+php:S1124,CODE_SMELL,MINOR,2min,Reorder the modifiers to comply with the PSR2 standard.,Other
+php:S1125,CODE_SMELL,MINOR,5min,"Remove the literal ""TRUE"" boolean value.",Code Style
+php:S1126,CODE_SMELL,MINOR,2min,"Replace this ""if-then-else"" statement by a single ""return"" statement.",Other
+php:S113,CODE_SMELL,MINOR,1min,Add a new line at the end of this file.,Other
+php:S1131,CODE_SMELL,MINOR,1min,Remove the useless trailing whitespaces at the end of this line.,Other
+php:S1134,CODE_SMELL,MAJOR,0min,"Take the required action to fix the issue indicated by this ""FIXME"" comment.",Code Hygiene
+php:S1135,CODE_SMELL,INFO,0min,"Complete the task associated to this ""TODO"" comment.",Code Hygiene
+php:S114,CODE_SMELL,MINOR,10min,Rename this interface name to match the regular expression ^[A-Z][a-zA-Z0-9]*$.,Naming Conventions
+php:S1142,CODE_SMELL,MAJOR,20min,"This method has 5 returns, which is more than the 3 allowed.",Code Complexity
+php:S1144,CODE_SMELL,MAJOR,5min,"Remove this unused private ""configureentities"" method.",Code Hygiene
+php:S1145,BUG,MAJOR,2min,"Remove this ""if"" statement.",Other
+php:S1155,CODE_SMELL,MINOR,2min,Use empty() to check whether the array is empty or not.,Code Style
+php:S116,CODE_SMELL,MINOR,2min,"Rename this field ""$is_repetitive"" to match the regular expression ^[a-z][a-zA-Z0-9]*$.",Naming Conventions
+php:S117,CODE_SMELL,MINOR,2min,"Rename this parameter ""$inner_blocks"" to match the regular expression ^[a-z][a-zA-Z0-9]*$.",Naming Conventions
+php:S1172,CODE_SMELL,MAJOR,5min,"Remove the unused function parameter ""$value"".",Code Hygiene
+php:S1185,CODE_SMELL,MINOR,2min,"Remove this method ""boot"" to simply inherit it.",Code Style
+php:S1186,CODE_SMELL,CRITICAL,5min,"Add a nested comment explaining why this method is empty, throw an Exception or complete the implementation.",Empty/Incomplete Code
+php:S1192,CODE_SMELL,CRITICAL,12min,"Define a constant instead of duplicating this literal ""<!-- wp:block {""ref"":%d} /-->"" 5 times.",Code Complexity
+php:S121,CODE_SMELL,CRITICAL,2min,Add curly braces around the nested statement(s).,Code Style
+php:S1226,BUG,MINOR,5min,"Introduce a new variable instead of reusing the parameter ""$checked"".",Logic Error
+php:S125,CODE_SMELL,MAJOR,5min,Remove this commented out code.,Code Hygiene
+php:S1264,CODE_SMELL,MINOR,5min,"Replace this ""for"" loop with a ""while"" loop.",Other
+php:S127,CODE_SMELL,MAJOR,10min,"Refactor the code to avoid updating the loop counter ""$c"" within the loop body.",Code Complexity
+php:S128,CODE_SMELL,BLOCKER,10min,"End this switch case with an unconditional break, continue, return or throw statement.",Logic Error
+php:S1301,CODE_SMELL,MINOR,5min,"Replace this ""switch"" statement with ""if"" statements to increase readability.",Code Style
+php:S131,CODE_SMELL,CRITICAL,5min,"Add a ""case default"" clause to this ""switch"" statement.",Logic Error
+php:S138,CODE_SMELL,MAJOR,20min,"This function ""updatePersono"" has 165 lines, which is greater than the 150 lines authorized. Split it into smaller functions.",Code Complexity
+php:S1448,CODE_SMELL,MAJOR,1h,"Class ""Configuration"" has 21 methods, which is greater than 20 authorized. Split it into smaller classes.",Code Complexity
+php:S1479,CODE_SMELL,MAJOR,30min,Reduce the number of switch cases from 47 to at most 30.,Other
+php:S1481,CODE_SMELL,MINOR,5min,"Remove this unused ""$content_is_empty"" local variable.",Code Hygiene
+php:S1488,CODE_SMELL,MINOR,2min,"Immediately return this expression instead of assigning it to the temporary variable ""$row"".",Code Style
+php:S1599,CODE_SMELL,BLOCKER,10min,"Remove the use of this variable variable ""$$inputData"".",Other
+php:S1603,CODE_SMELL,MAJOR,2min,"Replace this function name ""File_ANSI"", since a ""__construct"" method has already been defined in this class.",Other
+php:S1656,BUG,MAJOR,3min,Remove or correct this useless self-assignment,Logic Error
+php:S1757,CODE_SMELL,MINOR,2min,"Change this opening tag to either ""<?php"" or ""<?="".",Other
+php:S1763,BUG,MAJOR,5min,Delete this unreachable code or refactor the code to make it reachable.,Logic Error
+php:S1764,BUG,MAJOR,2min,"Identical sub-expressions on both sides of operator ""||""",Other
+php:S1765,CODE_SMELL,MINOR,2min,"Replace the ""var"" keyword with the modifier ""public"".",Other
+php:S1766,CODE_SMELL,MINOR,2min,13 property declarations were found in this statement. Reformat the code to declare only one property per statement.,Other
+php:S1779,CODE_SMELL,MINOR,2min,"Replace all non line feed end of line characters in this file ""class-simple-review.php"" by LF.",Other
+php:S1780,CODE_SMELL,MINOR,2min,"Remove this closing tag ""?>"".",Other
+php:S1781,CODE_SMELL,MINOR,1min,"Write this ""True"" constant in lower case.",Code Style
+php:S1784,BUG,MINOR,2min,"Explicitly mention the visibility of this method ""Adresse"".",Code Style
+php:S1793,CODE_SMELL,MINOR,2min,"Replace this ""else if"" keyword sequence by ""elseif"" keyword.",Code Style
+php:S1808,CODE_SMELL,MINOR,1min,Remove all space after the opening parenthesis and before the closing parenthesis.,Other
+php:S1848,BUG,MAJOR,5min,"Either remove this useless object instantiation of class ""JsonFilter"" or use it",Logic Error
+php:S1854,CODE_SMELL,MAJOR,15min,Remove this useless assignment to local variable '$match'.,Code Hygiene
+php:S1862,BUG,MAJOR,10min,This branch duplicates the one on line 352.,Other
+php:S1871,CODE_SMELL,MAJOR,10min,This branch's code block is the same as the block for the branch on line 291.,Logic Error
+php:S2003,BUG,MINOR,5min,"Replace ""require"" with ""require_once"".",Code Style
+php:S2010,CODE_SMELL,MINOR,5min,"Replace ""or"" with ""||"".",Code Style
+php:S2014,BUG,BLOCKER,15min,"Remove this use of ""$this"".",Logic Error
+php:S2041,CODE_SMELL,CRITICAL,2min,"Remove the parentheses from this ""echo"" call.",Other
+php:S2187,CODE_SMELL,BLOCKER,5min,Add some tests to this class.,Other
+php:S2201,BUG,MAJOR,10min,"The return value of ""strtolower"" must be used.",Other
+php:S2681,CODE_SMELL,MAJOR,5min,This statement will not be executed conditionally; only the first statement of this 2-statement block will be. The rest will execute unconditionally.,Other
+php:S2699,CODE_SMELL,BLOCKER,10min,Add at least one assertion to this test case.,Other
+php:S2737,CODE_SMELL,MINOR,5min,Add logic to this catch clause or eliminate it and rethrow the exception automatically.,Other
+php:S3011,CODE_SMELL,MAJOR,30min,Make sure that this accessibility update is safe here.,Security
+php:S3358,CODE_SMELL,MAJOR,5min,Extract this nested ternary operation into an independent statement.,Code Complexity
+php:S3415,CODE_SMELL,MAJOR,2min,"Swap these 2 arguments so they are in the correct order: expected value, actual value.",Code Style
+php:S3626,CODE_SMELL,MINOR,1min,Remove this redundant jump.,Code Hygiene
+php:S3699,BUG,MAJOR,5min,"Remove this use of the output from ""staging_marker""; ""staging_marker"" doesn't return anything.",Logic Error
+php:S3776,CODE_SMELL,CRITICAL,11min,Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.,Code Complexity
+php:S3801,CODE_SMELL,MAJOR,20min,"Refactor this function to use ""return"" consistently.",Code Style
+php:S3923,BUG,MAJOR,15min,Remove this conditional structure or edit its code blocks so that they're not all the same.,Other
+php:S3972,CODE_SMELL,CRITICAL,10min,"Move this ""if"" to a new line or add the missing ""else"".",Other
+php:S3973,CODE_SMELL,CRITICAL,10min,"Use curly braces or indentation to denote the code conditionally executed by this ""if"".",Logic Error
+php:S4143,BUG,MAJOR,5min,Verify this is the array key that was intended to be written to; a value has already been saved for it and not used.,Logic Error
+php:S4144,CODE_SMELL,MAJOR,15min,"Update this method so that its implementation is not identical to ""getAutoload"" on line 20.",Code Complexity
+php:S4824,BUG,CRITICAL,1min,Make sure that the referenced value variable is unset after the loop.,Other
+php:S4833,CODE_SMELL,MAJOR,5min,"Replace ""require"" with namespace import mechanism through the ""use"" keyword.",Code Style
+php:S5361,CODE_SMELL,CRITICAL,2min,"Replace this ""preg_replace()"" call by a ""str_replace()"" function call.",Code Style
+php:S5713,CODE_SMELL,MINOR,1min,Remove this useless Exception class; it derives from class detection\cache\cacheexception which is already caught.,Error Handling
+php:S5785,CODE_SMELL,MAJOR,2min,Use assertSame instead.,Code Style
+php:S5843,CODE_SMELL,MAJOR,12min,Simplify this regular expression to reduce its complexity from 22 to the 20 allowed.,Regex Issues
+php:S5850,BUG,MAJOR,10min,Group parts of the regex together to make the intended operator precedence explicit.,Regex Issues
+php:S5855,BUG,MAJOR,5min,Remove or rework this redundant alternative.,Other
+php:S5857,CODE_SMELL,MINOR,3min,"Replace this use of a reluctant quantifier with ""[^\)\]\}]*+"".",Regex Issues
+php:S5869,CODE_SMELL,MAJOR,5min,Remove duplicates in this character class.,Regex Issues
+php:S6353,CODE_SMELL,MINOR,5min,"Use concise quantifier syntax '+' instead of '{1,}'.",Regex Issues
+php:S6396,CODE_SMELL,MAJOR,5min,Remove this unnecessary quantifier.,Regex Issues
+php:S836,BUG,MAJOR,15min,Review the data-flow - use of uninitialized value.,Logic Error
+php:S905,BUG,MAJOR,10min,Remove or refactor this statement.,Other
+php:S930,BUG,MAJOR,10min,"""listi_kursojn"" expects 1 argument, but 2 were provided. Reduce provided arguments or add more parameters.",Logic Error
+python:ExecStatementUsage,CODE_SMELL,BLOCKER,10min,Do not use exec statement.,Other
+python:PrintStatementUsage,CODE_SMELL,MAJOR,5min,Replace print statement by built-in function.,Other
+python:S100,CODE_SMELL,MINOR,5min,"Rename method ""capture_video_frame_RAW16_NUMPY"" to match the regular expression ^[a-z_][a-z0-9_]*$.",Naming Conventions
+python:S101,CODE_SMELL,MINOR,5min,"Rename class ""Cell2location_WTA"" to match the regular expression ^_?([A-Z_][a-zA-Z0-9]*|[a-z_][a-z0-9_]*)$.",Naming Conventions
+python:S1045,BUG,MAJOR,5min,Catch this exception only once; it is already handled by a previous except clause.,Logic Error
+python:S1066,CODE_SMELL,MAJOR,5min,Merge this if statement with the enclosing one.,Code Style
+python:S107,CODE_SMELL,MAJOR,20min,"Method ""__init__"" has 16 parameters, which is greater than the 13 authorized.",Code Complexity
+python:S108,CODE_SMELL,MAJOR,5min,Either remove or fill this block of code.,Error Handling
+python:S1110,CODE_SMELL,MAJOR,1min,Remove those useless parentheses.,Code Style
+python:S112,CODE_SMELL,MAJOR,20min,Replace this generic exception class with a more specific one.,Error Handling
+python:S1134,CODE_SMELL,MAJOR,0min,"Take the required action to fix the issue indicated by this ""FIXME"" comment.",Code Hygiene
+python:S1135,CODE_SMELL,INFO,0min,"Complete the task associated to this ""TODO"" comment.",Code Hygiene
+python:S1143,BUG,CRITICAL,30min,"Remove this ""return"" statement from this ""finally"" block.",Error Handling
+python:S1144,CODE_SMELL,MAJOR,5min,Remove this unused class-private '__UNFINISHED_datastructs_are_equal' method.,Code Hygiene
+python:S116,CODE_SMELL,MINOR,2min,"Rename this field ""Pi"" to match the regular expression ^[_a-z][_a-z0-9]*$.",Naming Conventions
+python:S117,CODE_SMELL,MINOR,2min,"Rename this parameter ""BLOCK_SIZE"" to match the regular expression ^[_a-z][a-z0-9_]*$.",Naming Conventions
+python:S1172,CODE_SMELL,MAJOR,5min,"Remove the unused function parameter ""batch"".",Code Hygiene
+python:S1186,CODE_SMELL,CRITICAL,5min,"Add a nested comment explaining why this function is empty, or complete the implementation.",Empty/Incomplete Code
+python:S1192,CODE_SMELL,CRITICAL,6min,"Define a constant instead of duplicating this literal ""/tmp/test.hip"" 3 times.",Code Complexity
+python:S1226,BUG,MINOR,5min,Introduce a new variable or use its initial value before reassigning 'distance'.,Logic Error
+python:S125,CODE_SMELL,MAJOR,5min,Remove this commented out code.,Code Hygiene
+python:S1481,CODE_SMELL,MINOR,5min,"Remove the unused local variable ""res"".",Code Hygiene
+python:S1515,CODE_SMELL,MAJOR,30min,"Add a parameter to the parent lambda function and use variable ""device"" as its default value; The value of ""device"" might change at the next loop iteration.",Logic Error
+python:S1542,CODE_SMELL,MAJOR,10min,"Rename function ""commande_STAB"" to match the regular expression ^[a-z_][a-z0-9_]*$.",Naming Conventions
+python:S1607,CODE_SMELL,MAJOR,2min,Provide a reason for skipping this test.,OOP/Design
+python:S1656,BUG,MAJOR,3min,Remove or correct this useless self-assignment.,Logic Error
+python:S1700,CODE_SMELL,MAJOR,10min,"Rename field ""config""",Naming Conventions
+python:S1751,BUG,MAJOR,5min,Refactor this loop to do more than one iteration.,Logic Error
+python:S1763,BUG,MAJOR,5min,Delete this unreachable code or refactor the code to make it reachable.,Logic Error
+python:S1764,BUG,MAJOR,2min,"Correct one of the identical sub-expressions on both sides of operator ""and"".",Logic Error
+python:S1845,CODE_SMELL,BLOCKER,10min,"Rename field ""X_data"" to prevent any misunderstanding/clash with field ""x_data"" defined on line 154",Naming Conventions
+python:S1854,CODE_SMELL,MAJOR,15min,Remove this assignment to local variable 'tmprsz'; the value is never used.,Code Hygiene
+python:S1862,BUG,MAJOR,10min,This branch duplicates the one on line 874.,Logic Error
+python:S1871,CODE_SMELL,MAJOR,10min,"Either merge this branch with the identical one on line ""3567"" or change one of the implementations.",Logic Error
+python:S1940,CODE_SMELL,MINOR,2min,"Use the opposite operator (""<="") instead.",Code Style
+python:S2053,VULNERABILITY,CRITICAL,30min,Make this salt unpredictable.,Security
+python:S2115,VULNERABILITY,BLOCKER,45min,Add password protection to this database.,Other
+python:S2190,BUG,BLOCKER,30min,Add a way to break out of this function's recursion.,Logic Error
+python:S2201,BUG,MAJOR,5min,"The return value of ""isinstance"" must be used.",Logic Error
+python:S2208,CODE_SMELL,CRITICAL,5min,Import only needed names or import the module and then use its members.,OOP/Design
+python:S2638,CODE_SMELL,CRITICAL,15min,Remove parameter conn_params or provide default value.,OOP/Design
+python:S2710,CODE_SMELL,CRITICAL,5min,"Rename ""ls"" to a valid class parameter name or add the missing class parameter.",Naming Conventions
+python:S2711,BUG,BLOCKER,15min,"Remove this use of ""return"".",Logic Error
+python:S2734,BUG,BLOCKER,5min,Remove this return value.,Other
+python:S2737,CODE_SMELL,MINOR,5min,Add logic to this except clause or eliminate it and rethrow the exception automatically.,Error Handling
+python:S2757,BUG,MAJOR,2min,Was += meant instead?,Other
+python:S2772,CODE_SMELL,MINOR,2min,"Remove this unneeded ""pass"".",Code Style
+python:S2823,BUG,BLOCKER,1min,"Replace this symbol with a string; ""__all__"" can only contain strings.",Other
+python:S2836,CODE_SMELL,MAJOR,5min,"Add a ""break"" statement or remove this ""else"" clause.",Code Style
+python:S3358,CODE_SMELL,MAJOR,5min,Extract this nested conditional expression into an independent statement.,Code Complexity
+python:S3403,BUG,BLOCKER,5min,"Remove this ""is not"" check; it will always be True.",Logic Error
+python:S3457,CODE_SMELL,MAJOR,10min,Add argument(s) corresponding to the message's replacement field(s).,Code Style
+python:S3516,CODE_SMELL,BLOCKER,2min,Refactor this method to not always return the same value.,Logic Error
+python:S3626,CODE_SMELL,MINOR,1min,Remove this redundant return.,Code Hygiene
+python:S3699,BUG,MAJOR,5min,"Remove this use of the output from ""dump""; ""dump"" doesn’t return anything.",Logic Error
+python:S3776,CODE_SMELL,CRITICAL,6min,Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.,Code Complexity
+python:S3827,BUG,BLOCKER,10min,identity_id is used before it is defined. Move the definition before.,Logic Error
+python:S3862,BUG,BLOCKER,5min,"Add ""async"" before ""for""; This expression is an async generator.",Logic Error
+python:S3923,BUG,MAJOR,15min,Remove this if statement or edit its code blocks so that they're not all the same.,Logic Error
+python:S3981,BUG,MAJOR,2min,"The length of a collection is always "">=0"", so update this test to either ""==0"" or "">0"".",Logic Error
+python:S4143,BUG,MAJOR,5min,Verify this is the key that was intended; a value has already been saved for it on line 231.,Logic Error
+python:S4144,CODE_SMELL,MAJOR,15min,Update this function so that its implementation is not identical to accept_party_invite on line 929.,Code Complexity
+python:S4426,VULNERABILITY,CRITICAL,2min,Use a key length of at least 2048 bits.,Other
+python:S4487,CODE_SMELL,CRITICAL,5min,Remove this unread private attribute '__connection_key' or refactor the code to use its value.,Code Hygiene
+python:S4830,VULNERABILITY,CRITICAL,5min,Enable server certificate validation on this SSL/TLS connection.,Security
+python:S5361,CODE_SMELL,CRITICAL,2min,"Replace this ""re.sub()"" call by a ""str.replace()"" function call.",Code Style
+python:S5445,VULNERABILITY,CRITICAL,10min,'tempfile.mktemp' is insecure. Use 'tempfile.TemporaryFile' instead,Security
+python:S5542,VULNERABILITY,CRITICAL,20min,Use secure mode and padding scheme.,Other
+python:S5547,VULNERABILITY,CRITICAL,15min,Use a strong cipher algorithm.,Other
+python:S5549,BUG,BLOCKER,5min,"Remove duplicate values for parameter ""logger"" in ""describe_meshes"" call.",Other
+python:S5603,CODE_SMELL,MAJOR,5min,Remove this unused function declaration.,Code Hygiene
+python:S5607,BUG,BLOCKER,20min,"Fix this invalid ""+"" operation between incompatible types (str and int).",Logic Error
+python:S5632,BUG,BLOCKER,5min,Change this code so that it raises an object deriving from BaseException.,Error Handling
+python:S5644,BUG,BLOCKER,20min,"Fix this code; ""autotune_jobs"" does not have a ""__getitem__"" method.",Logic Error
+python:S5655,CODE_SMELL,CRITICAL,20min,"Change this argument; Function ""parse_json_from_response"" expects a different type",Type Safety
+python:S5659,VULNERABILITY,CRITICAL,30min,Don't use a JWT token without verifying its signature.,Security
+python:S5685,CODE_SMELL,MINOR,10min,"Use an assignment statement (""="") instead; "":="" operator is confusing in this context.",Code Style
+python:S5712,CODE_SMELL,CRITICAL,5min,"Return ""NotImplemented"" instead of raising ""NotImplementedError""",Other
+python:S5713,CODE_SMELL,MINOR,1min,Remove this redundant Exception class; it derives from another which is already caught.,Error Handling
+python:S5717,CODE_SMELL,CRITICAL,5min,"Change this default value to ""None"" and initialize this parameter inside the function/method.",OOP/Design
+python:S5719,BUG,BLOCKER,5min,"Add a ""self"" or class parameter",Logic Error
+python:S5720,CODE_SMELL,CRITICAL,5min,"Rename ""pin"" to ""self"" or add the missing ""self"" parameter.",Naming Conventions
+python:S5727,CODE_SMELL,CRITICAL,10min,Remove this identity check; it will always be True.,Logic Error
+python:S5747,CODE_SMELL,CRITICAL,10min,"Remove this ""raise"" statement or move it inside an ""except"" block.",Error Handling
+python:S5754,CODE_SMELL,CRITICAL,5min,Specify an exception class to catch or reraise the exception,Error Handling
+python:S5756,BUG,BLOCKER,20min,"Fix this call; ""open_config_dialog"" has type NoneType and it is not callable.",Other
+python:S5780,CODE_SMELL,MAJOR,5min,Change or remove duplicates of this key.,OOP/Design
+python:S5781,CODE_SMELL,MAJOR,5min,Change or remove duplicates of this key.,Other
+python:S5795,CODE_SMELL,MAJOR,1min,"Replace this ""is"" operator with ""==""; identity operator is not reliable here.",Logic Error
+python:S5796,BUG,MAJOR,5min,"Replace this ""is"" operator with ""=="".",Logic Error
+python:S5797,CODE_SMELL,CRITICAL,2min,Replace this expression; used as a condition it will always be constant.,Logic Error
+python:S5799,CODE_SMELL,MAJOR,1min,Merge these implicitly concatenated strings; or did you forget a comma?,Code Style
+python:S5806,CODE_SMELL,MAJOR,5min,Rename this variable; it shadows a builtin.,Naming Conventions
+python:S5807,BUG,BLOCKER,1min,"Change or remove this string; ""register_dataset"" is not defined.",Logic Error
+python:S5842,BUG,MINOR,5min,Rework this part of the regex to not match the empty string.,Regex Issues
+python:S5843,CODE_SMELL,MAJOR,10min,Simplify this regular expression to reduce its complexity from 24 to the 20 allowed.,Regex Issues
+python:S5845,BUG,CRITICAL,5min,Change this assertion to not compare dissimilar types (bool and str).,Other
+python:S5850,BUG,MAJOR,10min,Group parts of the regex together to make the intended operator precedence explicit.,Regex Issues
+python:S5855,BUG,MAJOR,5min,Remove or rework this redundant alternative.,Regex Issues
+python:S5857,CODE_SMELL,MINOR,3min,"Replace this use of a reluctant quantifier with ""[^\n]*"".",Regex Issues
+python:S5864,CODE_SMELL,MAJOR,5min,"Fix this call; Previous type checks suggest that ""use_fused_attn"" has type bool and it is not callable.",Type Safety
+python:S5869,CODE_SMELL,MAJOR,5min,Remove duplicates in this character class.,Regex Issues
+python:S5886,CODE_SMELL,MAJOR,5min,"Return a value of type ""str"" instead of ""NoneType"" or update function ""_parse_calendar_date"" type hint.",Type Safety
+python:S5890,CODE_SMELL,MAJOR,5min,"Assign to ""prev_num"" a value of type ""int"" instead of ""NoneType"" or update its type hint.",Type Safety
+python:S5905,BUG,BLOCKER,1min,Fix this assertion on a tuple literal.,Logic Error
+python:S5914,CODE_SMELL,MAJOR,5min,Replace this expression; its boolean value is constant.,Type Safety
+python:S6019,CODE_SMELL,MAJOR,10min,Fix this reluctant quantifier that will only ever match 1 repetition.,Regex Issues
+python:S6035,CODE_SMELL,MAJOR,5min,Replace this alternation with a character class.,Regex Issues
+python:S6326,CODE_SMELL,MAJOR,5min,Replace spaces with quantifier `{2}`.,Regex Issues
+python:S6353,CODE_SMELL,MINOR,5min,Use concise character class syntax '\w' instead of '[a-zA-Z0-9_]'.,Regex Issues
+python:S6395,CODE_SMELL,MAJOR,5min,Unwrap this unnecessarily grouped subpattern.,Regex Issues
+python:S6397,CODE_SMELL,MAJOR,5min,Replace this character class by the character itself.,Regex Issues
+python:S905,BUG,MAJOR,10min,Remove or refactor this statement; it has no side effects.,Logic Error
+python:S930,BUG,BLOCKER,10min,Add 1 missing arguments; 'read_text' expects at least 1 positional arguments.,Logic Error
+ruby:ParsingError,CODE_SMELL,MAJOR,30min,A parsing error occurred in this file.,Other
+ruby:S100,CODE_SMELL,MINOR,5min,"Rename function ""do_GET"" to match the regular expression ^(@{0,2}[\da-z_]+[!?=]?)|([*+-/%=!><~]+)|(\[]=?)$",Naming Conventions
+ruby:S1066,CODE_SMELL,MAJOR,5min,"Merge this ""unless"" statement with the nested one.",Code Style
+ruby:S107,CODE_SMELL,MAJOR,20min,"This function has 15 parameters, which is greater than the 7 authorized.",Code Complexity
+ruby:S108,CODE_SMELL,MAJOR,5min,Either remove or fill this block of code.,Error Handling
+ruby:S1134,CODE_SMELL,MAJOR,0min,"Take the required action to fix the issue indicated by this ""FIXME"" comment.",Other
+ruby:S1135,CODE_SMELL,INFO,0min,Complete the task associated to this TODO comment.,Code Hygiene
+ruby:S117,CODE_SMELL,MINOR,2min,"Rename this local variable to match the regular expression ""^(@{0,2}[\da-z_]+[!?=]?)|([*+-/%=!><~]+)|(\[]=?)$"".",Naming Conventions
+ruby:S1172,CODE_SMELL,MAJOR,5min,"Remove this unused function parameter ""has_structure_modules"".",Code Hygiene
+ruby:S1186,CODE_SMELL,CRITICAL,5min,Add a nested comment explaining why this function is empty or complete the implementation.,Empty/Incomplete Code
+ruby:S1192,CODE_SMELL,CRITICAL,8min,"Define a constant instead of duplicating this literal ""2014-03-10 11:28:22"" 4 times.",Code Complexity
+ruby:S131,CODE_SMELL,CRITICAL,5min,"Add a default clause to this ""case"" statement.",Logic Error
+ruby:S1481,CODE_SMELL,MINOR,5min,"Remove this unused ""parser"" local variable.",Code Hygiene
+ruby:S1763,BUG,MAJOR,5min,"Refactor this piece of code to not have any dead code after this ""return"".",Other
+ruby:S1764,BUG,MAJOR,2min,Correct one of the identical sub-expressions on both sides this operator,Other
+ruby:S3776,CODE_SMELL,CRITICAL,13min,Refactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.,Code Complexity
+ruby:S4144,CODE_SMELL,MAJOR,15min,"Update this function so that its implementation is not identical to ""test_each_iterates_over_items"" on line 13.",Code Complexity
+scala:S100,CODE_SMELL,MINOR,5min,"Rename function ""_info"" to match the regular expression ^([a-z][a-zA-Z0-9]*+(_[^a-zA-Z0-9]++)?+|[^a-zA-Z0-9]++)$",Other
+scala:S1135,CODE_SMELL,INFO,0min,Complete the task associated to this TODO comment.,Other
+scala:S117,CODE_SMELL,MINOR,2min,"Rename this parameter to match the regular expression ""^[_a-zA-Z][a-zA-Z0-9]*$"".",Other
+scala:S1192,CODE_SMELL,CRITICAL,18min,"Define a constant instead of duplicating this literal ""<refinement>"" 9 times.",Other
+scala:S125,CODE_SMELL,MAJOR,5min,Remove this commented out code.,Other
+scala:S1940,CODE_SMELL,MINOR,2min,"Use the opposite operator (""<="") instead.",Other
+scala:S3776,CODE_SMELL,CRITICAL,10min,Refactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.,Other
+secrets:S6290,VULNERABILITY,BLOCKER,30min,Make sure this AWS Access Key ID is not disclosed.,Other
+secrets:S6334,VULNERABILITY,BLOCKER,30min,Make sure this Google API Key is not disclosed.,Security
+secrets:S6335,VULNERABILITY,BLOCKER,30min,Make sure this Google Cloud service account key is not disclosed.,Security
+terraform:S6321,VULNERABILITY,MINOR,5min,Restrict IP addresses authorized to access administration services.,Security
+xml:S1134,CODE_SMELL,MAJOR,0min,"Take the required action to fix the issue indicated by this ""FIXME"" comment.",Other
+xml:S1135,CODE_SMELL,INFO,0min,"Complete the task associated to this ""TODO"" comment.",Other
+xml:S125,CODE_SMELL,MAJOR,5min,Remove this commented out code.,Code Hygiene
+xml:S1778,BUG,CRITICAL,2min,"Remove all characters located before ""<?xml"".",Other
+xml:S5594,VULNERABILITY,MAJOR,10min,Implement permissions on this exported component.,Other
