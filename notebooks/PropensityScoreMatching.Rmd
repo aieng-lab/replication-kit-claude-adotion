@@ -1,0 +1,296 @@
+---
+title: "Propensity Score Matching Analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(dev = 'CairoPNG', dpi = 150)
+options(bitmapType = 'cairo')
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(kableExtra)
+library(Cairo)
+
+
+# Set global ggplot theme - black axis lines, no grid
+# (Style copied from AdoptionTimeAnalysis.Rmd)
+theme_set(theme_minimal() +
+          theme(panel.grid = element_blank(),
+                axis.line = element_line(color = "black"),
+                axis.ticks = element_line(color = "black")))
+```
+
+## Loading and Exploring the Matching Data
+
+```{r load_data}
+matching_data <- read.csv("../data/matching.csv", stringsAsFactors = FALSE)
+repo_metrics  <- read.csv("../data/repo_metrics.csv", stringsAsFactors = FALSE)
+panel         <- read.csv("../data/panel_event_monthly.csv", stringsAsFactors = FALSE)
+
+# 1) Treatment-Repos ohne Claude-Commits (die 44)
+no_adoption <- repo_metrics$repo_name[
+    is.na(repo_metrics$claude_adoption_time) | repo_metrics$claude_adoption_time == ""]
+
+# 2) Kontroll-Repos, die später selbst Claude übernommen haben (die 4)
+late_adopters <- unique(panel$repo_name[
+    panel$dataset_source == "control" & !is.na(panel$event) & panel$event != ""])
+
+matching_data <- matching_data %>%
+    filter(!(group == "treatment" & repo_name %in% no_adoption)) %>%
+    filter(!repo_name %in% late_adopters)
+
+cat("Treatment:", sum(matching_data$group == "treatment"), "\n")
+glimpse(matching_data)
+```
+
+## Descriptive Statistics Table
+
+```{r descriptive_statistics_table, results='asis'}
+# Define all metrics (excluding propensity score)
+all_metrics <- c(
+    "age_days", "users_involved", "n_stars", "n_forks",
+    "n_releases", "n_pulls", "n_issues", "n_comments", "total_events"
+)
+
+# Create a dataframe for combined visualization
+combined_data <- data.frame()
+
+for (metric in all_metrics) {
+    # Extract data for each group
+    treatment_data <- matching_data %>%
+        filter(group == "treatment") %>%
+        select(repo_name, !!sym(metric)) %>%
+        mutate(
+            Group = "Treatment",
+            Metric = gsub("_", " ", paste0(toupper(substr(metric, 1, 1)), substr(metric, 2, nchar(metric)))),
+            Value = !!sym(metric)
+        )
+
+    # Get matched control repos (combine all three possible matches)
+    matched_control_repos <- c(
+        unique(na.omit(matching_data$matched_control_1)),
+        unique(na.omit(matching_data$matched_control_2)),
+        unique(na.omit(matching_data$matched_control_3))
+    ) %>% unique()
+
+    control_matched_data <- matching_data %>%
+        filter(repo_name %in% matched_control_repos) %>%
+        select(repo_name, !!sym(metric)) %>%
+        mutate(
+            Group = "Matched Control",
+            Metric = gsub("_", " ", paste0(toupper(substr(metric, 1, 1)), substr(metric, 2, nchar(metric)))),
+            Value = !!sym(metric)
+        )
+
+    control_all_data <- matching_data %>%
+        filter(group == "control") %>%
+        select(repo_name, !!sym(metric)) %>%
+        mutate(
+            Group = "All Candidates",
+            Metric = gsub("_", " ", paste0(toupper(substr(metric, 1, 1)), substr(metric, 2, nchar(metric)))),
+            Value = !!sym(metric)
+        )
+
+    # Combine data for current metric
+    metric_data <- bind_rows(treatment_data, control_matched_data, control_all_data) %>%
+        select(repo_name, Group, Metric, Value)
+
+    # Add to combined dataframe
+    combined_data <- bind_rows(combined_data, metric_data)
+}
+
+# Define metrics that need log transformation
+log_metrics <- c("Age days", "Users involved", "N stars", "N forks",
+                "N releases", "N pulls", "N issues", "N comments", "Total events")
+
+# Prepare data with appropriate transformations
+combined_data <- combined_data %>%
+    mutate(
+        # Add a small constant to ensure log works with zeros
+        Value_transformed = ifelse(Value <= 0, 0.1, Value),
+        Metric_label = ifelse(Metric %in% log_metrics,
+                             paste0(Metric, " (log scale)"),
+                             Metric)
+    )
+
+# Calculate descriptive statistics for each metric by group
+stats_table <- combined_data %>%
+  group_by(Metric, Group) %>%
+  summarise(
+    Count = n(),
+    Mean = mean(Value, na.rm = TRUE),
+    StdDev = sd(Value, na.rm = TRUE),
+    Min = quantile(Value, 0, na.rm = TRUE),
+    Q25 = quantile(Value, 0.25, na.rm = TRUE),
+    Median = quantile(Value, 0.5, na.rm = TRUE),
+    Q75 = quantile(Value, 0.75, na.rm = TRUE),
+    Max = quantile(Value, 1, na.rm = TRUE)
+  ) %>%
+  ungroup()
+
+# Format the numbers properly
+stats_table_formatted <- stats_table %>%
+  mutate(
+    Mean = round(Mean, 4),
+    StdDev = round(StdDev, 4),
+    Min = round(Min, 4),
+    Q25 = round(Q25, 4),
+    Median = round(Median, 4),
+    Q75 = round(Q75, 4),
+    Max = round(Max, 4)
+  )
+
+# Create an HTML table
+stats_table_formatted %>%
+  kable("html", caption = "Descriptive Statistics by Metric and Group") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = TRUE) %>%
+  column_spec(1, bold = TRUE) %>%
+  collapse_rows(columns = 1, valign = "top") %>%
+  scroll_box(width = "100%", height = "600px")
+```
+
+## Balance Table: Treatment vs Matched Control
+
+```{r balance_table, results='asis'}
+# Calculate balance statistics between Treatment and Matched Control
+balance_stats <- combined_data %>%
+  filter(Group %in% c("Treatment", "Matched Control")) %>%
+  group_by(Metric, Group) %>%
+  summarise(
+    Mean = mean(Value, na.rm = TRUE),
+    Median = median(Value, na.rm = TRUE),
+    Var = var(Value, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(
+    names_from = Group,
+    values_from = c(Mean, Median, Var),
+    names_sep = "_"
+  ) %>%
+  mutate(
+    Norm_Diff = (`Mean_Treatment` - `Mean_Matched Control`) /
+                sqrt((`Var_Treatment` + `Var_Matched Control`) / 2),
+    `Treatment Mean` = round(`Mean_Treatment`, 2),
+    `Control Mean` = round(`Mean_Matched Control`, 2),
+    `Treatment Median` = round(`Median_Treatment`, 2),
+    `Control Median` = round(`Median_Matched Control`, 2),
+    `Norm. Diff` = round(Norm_Diff, 3)
+  ) %>%
+  select(Metric, `Treatment Mean`, `Control Mean`, `Treatment Median`, `Control Median`, `Norm. Diff`)
+
+# Create the balance table
+balance_stats %>%
+  kable("html", caption = "Balance Statistics: Treatment vs Matched Control (|Norm. Diff| < 0.25 indicates acceptable balance, < 0.1 means good balance)") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = FALSE) %>%
+  column_spec(1, bold = TRUE)
+```
+
+## Visualizing Propensity Score Distributions
+
+```{r propensity_distributions, fig.width=5, fig.height=2.5}
+ps_treatment <- matching_data %>%
+  filter(group == "treatment") %>%
+  select(repo_name, propensity_score) %>%
+  mutate(Group = "Treatment", Value = propensity_score)
+
+matched_control_repos <- c(
+  unique(na.omit(matching_data$matched_control_1)),
+  unique(na.omit(matching_data$matched_control_2)),
+  unique(na.omit(matching_data$matched_control_3))
+) %>% unique()
+
+ps_matched_control <- matching_data %>%
+  filter(repo_name %in% matched_control_repos) %>%
+  select(repo_name, propensity_score) %>%
+  mutate(Group = "Matched Control", Value = propensity_score)
+
+ps_all_candidates <- matching_data %>%
+  filter(group == "control") %>%
+  select(repo_name, propensity_score) %>%
+  mutate(Group = "All Candidates", Value = propensity_score)
+
+ps_data <- bind_rows(ps_treatment, ps_matched_control, ps_all_candidates) %>%
+  mutate(Group = factor(Group,
+                        levels = c("All Candidates", "Treatment", "Matched Control")))
+
+cols  <- c("All Candidates" = "#009E73",
+           "Treatment"      = "#0072B2",
+           "Matched Control" = "#CC79A7")
+ltys  <- c("All Candidates" = "solid",
+           "Treatment"      = "solid",
+           "Matched Control" = "solid")
+
+xmax <- 0.11
+
+# Dichte einmal selbst berechnen (gleicher Bereich wie die x-Achse)
+dens <- function(df, adjust = 1.5, n = 4096) {
+  d <- density(df$Value, adjust = adjust, n = n, from = 0, to = xmax)
+  data.frame(x = d$x, y = d$y)
+}
+d_all <- dens(ps_all_candidates)
+d_trt <- dens(ps_treatment)
+d_mat <- dens(ps_matched_control)
+
+# Vertikale Schraffur: senkrechte Striche von 0 bis zur Kurve
+hatch_vertical <- function(d, spacing, col, lw = 0.25) {
+  xs  <- seq(spacing / 2, xmax, by = spacing)
+  seg <- data.frame(x = xs, y = approx(d$x, d$y, xout = xs)$y)
+  geom_segment(data = seg, aes(x = x, xend = x, y = 0, yend = y),
+               colour = col, linewidth = lw, inherit.aes = FALSE)
+}
+
+# Diagonale Schraffur: schräge Linien, nur innerhalb der Fläche unter der Kurve
+hatch_diagonal <- function(d, slope, spacing, col, lw = 0.25) {
+  ymax_d <- max(d$y)
+  cs <- seq(-ymax_d / abs(slope) - spacing,
+            xmax + ymax_d / abs(slope) + spacing, by = spacing)
+  pieces <- lapply(seq_along(cs), function(k) {
+    y      <- slope * (d$x - cs[k])
+    inside <- y >= 0 & y <= d$y
+    if (!any(inside)) return(NULL)
+    r   <- rle(inside)
+    grp <- rep(seq_along(r$lengths), r$lengths)
+    data.frame(x = d$x[inside], y = y[inside], id = paste(k, grp[inside]))
+  })
+  geom_path(data = do.call(rbind, pieces), aes(x = x, y = y, group = id),
+            colour = col, linewidth = lw, inherit.aes = FALSE)
+}
+
+# Steigung so wählen, dass die Linien optisch ca. 45° haben
+ymax <- max(d_all$y, d_trt$y, d_mat$y)
+asp  <- 5.2 / 2.9                 # Breite/Höhe des Plotbereichs (bei 6 x 3.5 Zoll)
+slope <- asp * ymax / xmax
+
+# Kräftigere Farben (blau/orange-rot sind am stärksten unterscheidbar, auch bei Farbsehschwäche)
+col_all <- "#6E6E6E"   # dunkles Grau für die Kandidaten (hält sie im Hintergrund)
+col_trt <- "#0057B8"   # kräftiges Blau
+col_mat <- "#D55E00"   # kräftiges Orange-Rot
+
+plot <- ggplot() +
+  hatch_vertical(d_all, spacing = 0.002, col = col_all, lw = 0.3) +
+  hatch_diagonal(d_trt, slope =  slope, spacing = 0.005, col = col_trt, lw = 0.4) +
+  hatch_diagonal(d_mat, slope = -slope, spacing = 0.005, col = col_mat, lw = 0.4) +
+  geom_line(data = d_all, aes(x = x, y = y), colour = col_all, linewidth = 0.7) +
+  geom_line(data = d_trt, aes(x = x, y = y), colour = col_trt, linewidth = 0.8) +
+  geom_line(data = d_mat, aes(x = x, y = y), colour = col_mat, linewidth = 0.8,
+            linetype = "dashed") +
+  annotate("text", x = 0.06, y = ymax * 0.90, hjust = 0, size = 3,
+           label = "All candidates (vertical)", colour = col_all) +
+  annotate("text", x = 0.06, y = ymax * 0.80, hjust = 0, size = 3,
+           label = "Treatment (//)", colour = col_trt) +
+  annotate("text", x = 0.06, y = ymax * 0.70, hjust = 0, size = 3,
+           label = "Matched control (\\\\)", colour = col_mat) +
+  coord_cartesian(xlim = c(0, xmax)) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = "Propensity Score", y = "Density")
+
+print(plot)
+
+ggsave("../plots/propensity_score_distribution.pdf",
+  plot = plot, width = 6, height = 3.5, device = CairoPDF, family = "DejaVu Sans")
+```

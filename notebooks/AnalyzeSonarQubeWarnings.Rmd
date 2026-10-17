@@ -1,0 +1,399 @@
+---
+title: "SonarQube Warning Analysis: Pre vs Post Claude Adoption"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 12,
+  fig.height = 8,
+  dpi = 300
+)
+```
+
+## Load Required Libraries
+
+```{r libraries}
+library(tidyverse)
+library(scales)
+library(knitr)
+library(kableExtra)
+library(ggplot2)
+library(gridExtra)
+library(RColorBrewer)
+
+# Set theme
+theme_set(theme_minimal(base_size = 12))
+```
+
+# Data Loading
+
+```{r load-data}
+# Load warning definitions (rule metadata)
+definitions <- read_csv("../data/sonarqube_warning_definitions.csv",
+                       show_col_types = FALSE)
+
+# Load actual warnings
+warnings <- read_csv("../data/sonarqube_warnings.csv",
+                    show_col_types = FALSE)
+
+# Display data structure
+cat("Warning definitions:", nrow(definitions), "rules\n")
+cat("Total warnings:", nrow(warnings), "warnings\n")
+cat("\nColumns in warnings data:\n")
+print(names(warnings))
+```
+
+# Data Preparation
+
+```{r data-prep}
+# Join warnings with definitions to get severity, type, and category
+warnings_enriched <- warnings %>%
+  left_join(definitions, by = "rule") %>%
+  mutate(
+    # Create period label
+    period = ifelse(relative_period < 0, "Pre-Claude", "Post-Claude"),
+    period = factor(period, levels = c("Pre-Claude", "Post-Claude")),
+
+    # Ensure severity is ordered
+    severity = factor(severity,
+                     levels = c("INFO", "MINOR", "MAJOR", "CRITICAL", "BLOCKER")),
+
+    # Ensure type is factor
+    type = factor(type, levels = c("CODE_SMELL", "BUG", "VULNERABILITY")),
+
+    # Fill in missing categories as "Unmapped"
+    category = ifelse(is.na(category) | category == "", "Unmapped", category),
+    category = factor(category)
+  )
+
+# Summary statistics
+cat("\nData summary:\n")
+cat("Pre-Claude warnings:", sum(warnings_enriched$period == "Pre-Claude"), "\n")
+cat("Post-Claude warnings:", sum(warnings_enriched$period == "Post-Claude"), "\n")
+cat("Total repos:", n_distinct(warnings_enriched$repo_name), "\n")
+```
+
+# Overall Statistics
+
+```{r overall-stats}
+# Calculate summary statistics by period
+overall_summary <- warnings_enriched %>%
+  group_by(period) %>%
+  summarise(
+    total_warnings = n(),
+    unique_repos = n_distinct(repo_name),
+    unique_rules = n_distinct(rule),
+    warnings_per_repo = n() / n_distinct(repo_name)
+  )
+
+kable(overall_summary,
+      caption = "Overall Warning Statistics by Period",
+      digits = 2) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+# Severity Distribution
+
+## Severity Counts
+
+```{r severity-counts}
+severity_summary <- warnings_enriched %>%
+  filter(!is.na(severity)) %>%
+  group_by(period, severity) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(period) %>%
+  mutate(
+    total = sum(count),
+    percentage = (count / total) * 100
+  )
+
+# Wide format for comparison
+severity_wide <- severity_summary %>%
+  select(severity, period, count, percentage) %>%
+  pivot_wider(
+    names_from = period,
+    values_from = c(count, percentage),
+    names_glue = "{period}_{.value}"
+  ) %>%
+  mutate(
+    count_change = `Post-Claude_count` - `Pre-Claude_count`,
+    pct_change = `Post-Claude_percentage` - `Pre-Claude_percentage`
+  )
+
+kable(severity_wide,
+      caption = "Severity Distribution Comparison",
+      digits = 2) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+## Severity Visualization
+
+```{r severity-plot, fig.height=6}
+# Bar plot of severity distribution
+p1 <- ggplot(severity_summary, aes(x = severity, y = percentage, fill = period)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.8) +
+  geom_text(aes(label = sprintf("%.1f%%", percentage)),
+            position = position_dodge(width = 0.9),
+            vjust = -0.5, size = 3) +
+  scale_fill_manual(values = c("Pre-Claude" = "#E69F00", "Post-Claude" = "#56B4E9")) +
+  labs(
+    title = "Severity Distribution: Pre vs Post Claude",
+    x = "Severity Level",
+    y = "Percentage of Warnings",
+    fill = "Period"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "top")
+
+# Stacked percentage
+p2 <- severity_summary %>%
+  group_by(period) %>%
+  mutate(cum_pct = cumsum(percentage)) %>%
+  ggplot(aes(x = period, y = percentage, fill = severity)) +
+  geom_bar(stat = "identity", alpha = 0.8) +
+  geom_text(aes(label = sprintf("%.1f%%", percentage)),
+            position = position_stack(vjust = 0.5), size = 3) +
+  scale_fill_brewer(palette = "YlOrRd", direction = 1) +
+  labs(
+    title = "Severity Distribution (Stacked)",
+    x = "Period",
+    y = "Percentage",
+    fill = "Severity"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "right")
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+# Warning Type Distribution
+
+## Type Counts
+
+```{r type-counts}
+type_summary <- warnings_enriched %>%
+  filter(!is.na(type)) %>%
+  group_by(period, type) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(period) %>%
+  mutate(
+    total = sum(count),
+    percentage = (count / total) * 100
+  )
+
+# Wide format
+type_wide <- type_summary %>%
+  select(type, period, count, percentage) %>%
+  pivot_wider(
+    names_from = period,
+    values_from = c(count, percentage),
+    names_glue = "{period}_{.value}"
+  ) %>%
+  mutate(
+    count_change = `Post-Claude_count` - `Pre-Claude_count`,
+    pct_change = `Post-Claude_percentage` - `Pre-Claude_percentage`
+  )
+
+kable(type_wide,
+      caption = "Warning Type Distribution Comparison",
+      digits = 2) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+## Type Visualization
+
+```{r type-plot, fig.height=6}
+ggplot(type_summary, aes(x = type, y = percentage, fill = period)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.8) +
+  geom_text(aes(label = sprintf("%.1f%%\n(n=%s)", percentage,
+                                scales::comma(count))),
+            position = position_dodge(width = 0.9),
+            vjust = -0.5, size = 3.5) +
+  scale_fill_manual(values = c("Pre-Claude" = "#E69F00", "Post-Claude" = "#56B4E9")) +
+  labs(
+    title = "Warning Type Distribution: Pre vs Post Claude",
+    subtitle = "BUG = Actual bugs, CODE_SMELL = Maintainability issues, VULNERABILITY = Security issues",
+    x = "Warning Type",
+    y = "Percentage of Warnings",
+    fill = "Period"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = "top",
+    plot.subtitle = element_text(size = 10, color = "gray40")
+  )
+```
+
+# Category Distribution
+
+## Top 20 Categories
+
+```{r category-counts}
+category_summary <- warnings_enriched %>%
+  filter(!is.na(category)) %>%
+  group_by(period, category) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(period) %>%
+  mutate(
+    total = sum(count),
+    percentage = (count / total) * 100
+  ) %>%
+  ungroup()
+
+# Get top 20 categories overall
+top_categories <- category_summary %>%
+  group_by(category) %>%
+  summarise(total_count = sum(count)) %>%
+  arrange(desc(total_count)) %>%
+  head(20) %>%
+  pull(category)
+
+# Filter to top categories
+category_top <- category_summary %>%
+  filter(category %in% top_categories)
+
+# Wide format
+category_wide <- category_top %>%
+  select(category, period, count, percentage) %>%
+  pivot_wider(
+    names_from = period,
+    values_from = c(count, percentage),
+    names_glue = "{period}_{.value}"
+  ) %>%
+  mutate(
+    count_change = `Post-Claude_count` - `Pre-Claude_count`,
+    pct_change = `Post-Claude_percentage` - `Pre-Claude_percentage`
+  ) %>%
+  arrange(desc(`Pre-Claude_count` + `Post-Claude_count`))
+
+kable(category_wide,
+      caption = "Top 20 Category Distribution Comparison",
+      digits = 2) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                font_size = 11) %>%
+  scroll_box(height = "500px")
+```
+
+## Average Warnings per Repo per Month by Category
+
+```{r category-avg-warnings-per-repo-month}
+# Calculate average warnings per repo per month for each category
+category_repo_month <- warnings_enriched %>%
+  filter(!is.na(category)) %>%
+  group_by(period, category, repo_name, month) %>%
+  summarise(warnings_count = n(), .groups = "drop") %>%
+  # Calculate average across months for each repo-category-period
+  group_by(period, category, repo_name) %>%
+  summarise(avg_warnings_per_month = mean(warnings_count), .groups = "drop") %>%
+  # Calculate average across repos for each category-period
+  group_by(period, category) %>%
+  summarise(
+    mean_warnings = mean(avg_warnings_per_month),
+    median_warnings = median(avg_warnings_per_month),
+    sd_warnings = sd(avg_warnings_per_month),
+    n_repos = n(),
+    .groups = "drop"
+  )
+
+# Filter to top categories and create wide format
+category_avg_wide <- category_repo_month %>%
+  filter(category %in% top_categories) %>%
+  select(category, period, mean_warnings, median_warnings) %>%
+  pivot_wider(
+    names_from = period,
+    values_from = c(mean_warnings, median_warnings),
+    names_glue = "{period}_{.value}"
+  ) %>%
+  mutate(
+    mean_change = `Post-Claude_mean_warnings` - `Pre-Claude_mean_warnings`,
+    mean_pct_change = ifelse(`Pre-Claude_mean_warnings` > 0,
+                             (`Post-Claude_mean_warnings` - `Pre-Claude_mean_warnings`) /
+                               `Pre-Claude_mean_warnings` * 100,
+                             NA)
+  ) %>%
+  arrange(desc(`Pre-Claude_mean_warnings` + `Post-Claude_mean_warnings`)) %>%
+  select(category,
+         `Pre-Claude_mean_warnings`, `Post-Claude_mean_warnings`,
+         `Pre-Claude_median_warnings`, `Post-Claude_median_warnings`,
+         mean_change, mean_pct_change)
+
+kable(category_avg_wide,
+      caption = "Average Warnings per Repository per Month by Category",
+      digits = 2,
+      col.names = c("Category",
+                    "Pre Mean", "Post Mean",
+                    "Pre Median", "Post Median",
+                    "Mean Change", "Mean % Change")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                font_size = 11)
+```
+
+## Category Visualization
+
+```{r category-plot, fig.height=10}
+# Reorder categories by total count
+category_top <- category_top %>%
+  mutate(category = fct_reorder(category, count, .fun = sum))
+
+ggplot(category_top, aes(x = percentage, y = category, fill = period)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.8) +
+  geom_text(aes(label = sprintf("%.1f%%", percentage)),
+            position = position_dodge(width = 0.9),
+            hjust = -0.1, size = 2.5) +
+  scale_fill_manual(values = c("Pre-Claude" = "#E69F00", "Post-Claude" = "#56B4E9")) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    title = "Top 20 Warning Categories: Pre vs Post Claude",
+    x = "Percentage of Warnings",
+    y = "Category",
+    fill = "Period"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    legend.position = "top",
+    axis.text.y = element_text(size = 9)
+  )
+```
+
+## Category Change Analysis
+
+```{r category-change}
+# Calculate percentage point change for all categories
+category_change <- category_summary %>%
+  select(category, period, percentage) %>%
+  pivot_wider(names_from = period, values_from = percentage, values_fill = 0) %>%
+  mutate(
+    change = `Post-Claude` - `Pre-Claude`,
+    abs_change = abs(change)
+  ) %>%
+  arrange(desc(abs_change)) %>%
+  head(15)
+
+ggplot(category_change, aes(x = change, y = fct_reorder(category, change))) +
+  geom_col(aes(fill = change > 0), alpha = 0.8) +
+  geom_text(aes(label = sprintf("%+.2f%%", change)),
+            hjust = ifelse(category_change$change > 0, -0.1, 1.1),
+            size = 3) +
+  scale_fill_manual(
+    values = c("TRUE" = "#D55E00", "FALSE" = "#009E73"),
+    labels = c("Decreased", "Increased"),
+    name = "Direction"
+  ) +
+  labs(
+    title = "Top 15 Category Changes (Percentage Point Difference)",
+    subtitle = "Post-Claude % minus Pre-Claude %",
+    x = "Percentage Point Change",
+    y = "Category"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "top")
+```
+
+# Session Info
+
+```{r session-info}
+sessionInfo()
+```
