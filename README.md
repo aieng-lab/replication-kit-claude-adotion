@@ -1,15 +1,15 @@
 # A Replication Study of Cursor's Velocity--Quality Trade-off: Evidence from Claude Code Adoption in Open-Source Projects
 
-This repository contains the replication package this paper:
+This repository contains the replication package of this paper:
 
 
 ## Organization
 
-* The `scripts/` folder contains all the scripts we used to collect data, run propensity score matching, and collect SonarQube metrics. These scripts are volatile in nature: Rerunning them will likely not get the same dataset we obtained for our paper (GitHub repositories growing and taken down, GitHub API changing, SonarQube changing, etc.), but they might be a valuable reference.
+* The `scripts/` folder contains all the scripts we used to collect data, run the propensity score matching, and collect metrics through SonarQube and GH Archive.  Rerunning the scripts will likely not get the same dataset we obtained for our paper because of different aspects: GitHub repositories growing and taken down, GitHub API changing, SonarQube changing, etc.
 * The `data/` folder contains the exact dataset we used for our paper.
-    * `repos.csv`: Metadata for treatment group repositories (Cursor-adopting projects)
-    * `claude_commits.csv`: Commit-level data showing commits modifying Cursor configuration files
-    * `claude_files.csv`: File-level data for Cursor configuration files
+    * `repos.csv`: Metadata for treatment group repositories (Claude-adopting projects)
+    * `claude_commits.csv`: Commit-level data showing commits modifying CLAUDE.md files
+    * `claude_files.csv`: File-level data for Claude configuration files
     * `repo_events.csv` / `repo_events_control.csv`: GitHub event data for treatment/control repositories
     * `matching.csv`: Propensity score matching results (treatment-control pairs)
     * `panel_event_monthly.csv`: Main panel dataset used for DiD analysis (monthly aggregated)
