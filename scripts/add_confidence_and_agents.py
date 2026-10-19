@@ -572,7 +572,8 @@ def main():
     # Required paths - these must exist
     claude_files_path = '../data/claude_files.csv'
     ts_repos_monthly_path = '../data/ts_repos_monthly.csv'
-    base_repo_path = "/home/dstrell/raid/sonar-project/ClaudeRepos"    
+    # Cloned repositories, same location as used by clone_repos.py
+    base_repo_path = str(Path(__file__).resolve().parent.parent.parent / "ClaudeRepos")
     print("="*80)
     print("Processing panel_event_monthly.csv to add confidence and agent columns")
     print("="*80)

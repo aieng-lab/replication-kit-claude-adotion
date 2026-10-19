@@ -25,7 +25,7 @@ library(plm)
 ## Loading and Preparing the Data
 
 ```{r load_data}
-panel_data <- fread("C:/Users/domis/Documents/Projekt/data/panel_event_monthly.csv")
+panel_data <- fread("../data/panel_event_monthly.csv")
 
 dynamic_data <- panel_data %>%
     mutate(time_date = as.Date(paste0(time, "-01"))) %>%
