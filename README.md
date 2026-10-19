@@ -24,7 +24,7 @@ This repository contains the replication package of this paper:
     * `DynamicPanel.md`: Main panel GMM results
     * `AnalyzeSonarQubeWarnings.md`: Appendix analysis on SonarQube warnings
     
-* The `plots/` folder contains all the plots in this paper (`.gitignore`d in the GitHub repository but available in Zenodo)
+* The `plots/` folder contains all the plots in this paper.
 
 ## Development Environment
 
